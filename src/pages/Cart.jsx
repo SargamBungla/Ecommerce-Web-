@@ -1,16 +1,13 @@
-import { useSelector, useDispatch } from "react-redux"; // ✅ RTK
-import { removeFromCart, updateQty, clearCart } from "../store/cartSlice"; // ✅ RTK
+import { useSelector, useDispatch } from "react-redux";
+import { removeFromCart, updateQty, clearCart } from "../store/cartSlice";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import FormatePrice from "../Helpers/FormatePrice";
 
 export const Cart = () => {
   const dispatch = useDispatch();
-
-  // ✅ Context ki jagah useSelector
   const { cart } = useSelector((state) => state.cart);
 
-  // ✅ Calculate karo
   const totalPrice = cart.reduce(
     (sum, item) => sum + Number(item.price) * Number(item.qty),
     0,
@@ -20,8 +17,8 @@ export const Cart = () => {
 
   if (cart.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-96 gap-4 bg-white dark:bg-gray-900">
-        <p className="text-2xl font-semibold text-gray-600 dark:text-white">
+      <div className="flex flex-col items-center justify-center min-h-96 gap-4 bg-white dark:bg-gray-900 px-4">
+        <p className="text-xl md:text-2xl font-semibold text-gray-600 dark:text-white">
           Cart is Empty!
         </p>
         <Link
@@ -35,43 +32,43 @@ export const Cart = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 transition-colors duration-300">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 md:py-12 px-4 transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-8">
+        <h1 className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6 md:mb-8">
           Your Cart
         </h1>
 
-        <div className="grid grid-cols-12 gap-8">
+        {/* ✅ Mobile: column, Desktop: grid */}
+        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 md:gap-8">
           {/* LEFT — Cart Items */}
-          <div className="col-span-8">
+          <div className="lg:col-span-8">
             {cart.map((item) => (
               <div
                 key={item.id}
-                className="grid grid-cols-12 gap-4 border-b border-gray-200 dark:border-gray-700 py-6 bg-white dark:bg-gray-800 rounded-lg px-4 mb-4"
+                className="grid grid-cols-12 gap-2 md:gap-4 border-b border-gray-200 dark:border-gray-700 py-4 md:py-6 bg-white dark:bg-gray-800 rounded-lg px-3 md:px-4 mb-4"
               >
                 {/* Image */}
                 <div className="col-span-3">
                   <img
                     src={item.thumbnail}
                     alt={item.title}
-                    className="w-full h-24 object-contain rounded-lg bg-gray-50 dark:bg-gray-700"
+                    className="w-full h-16 md:h-24 object-contain rounded-lg bg-gray-50 dark:bg-gray-700"
                   />
                 </div>
 
                 {/* Details */}
                 <div className="col-span-5 flex flex-col justify-between">
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 uppercase hidden sm:block">
                       {item.category}
                     </p>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mt-1">
+                    <h3 className="font-semibold text-gray-900 dark:text-white mt-1 text-xs md:text-base line-clamp-2">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-1 hidden sm:block">
                       Brand: {item.brand}
                     </p>
                   </div>
-                  {/* ✅ RTK dispatch */}
                   <button
                     onClick={() => dispatch(removeFromCart(item.id))}
                     className="self-start text-xs text-red-500 hover:text-red-700 uppercase font-semibold mt-2"
@@ -82,8 +79,7 @@ export const Cart = () => {
 
                 {/* Qty Toggle */}
                 <div className="col-span-2 flex items-center justify-center">
-                  <div className="flex items-center border border-gray-200 dark:border-gray-600 rounded-md overflow-hidden">
-                    {/* ✅ RTK dispatch */}
+                  <div className="flex flex-col md:flex-row items-center border border-gray-200 dark:border-gray-600 rounded-md overflow-hidden">
                     <button
                       onClick={() =>
                         dispatch(
@@ -93,32 +89,27 @@ export const Cart = () => {
                           }),
                         )
                       }
-                      className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                      className="w-7 h-7 md:w-9 md:h-9 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                     >
-                      <FaMinus size={10} />
+                      <FaMinus size={8} />
                     </button>
-                    <span className="w-9 text-center font-semibold dark:text-white">
+                    <span className="w-7 md:w-9 text-center font-semibold dark:text-white text-sm">
                       {item.qty}
                     </span>
                     <button
                       onClick={() =>
-                        dispatch(
-                          updateQty({
-                            id: item.id,
-                            qty: item.qty + 1,
-                          }),
-                        )
+                        dispatch(updateQty({ id: item.id, qty: item.qty + 1 }))
                       }
-                      className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                      className="w-7 h-7 md:w-9 md:h-9 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                     >
-                      <FaPlus size={10} />
+                      <FaPlus size={8} />
                     </button>
                   </div>
                 </div>
 
                 {/* Price */}
                 <div className="col-span-2 flex items-center justify-end">
-                  <p className="font-semibold text-gray-900 dark:text-white">
+                  <p className="font-semibold text-gray-900 dark:text-white text-xs md:text-base">
                     <FormatePrice
                       price={Number(item.price) * Number(item.qty)}
                     />
@@ -127,7 +118,6 @@ export const Cart = () => {
               </div>
             ))}
 
-            {/* ✅ RTK dispatch */}
             <button
               onClick={() => dispatch(clearCart())}
               className="mt-4 text-sm text-red-500 hover:text-red-700 uppercase font-semibold"
@@ -137,8 +127,8 @@ export const Cart = () => {
           </div>
 
           {/* RIGHT — Order Summary */}
-          <div className="col-span-4">
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm sticky top-8">
+          <div className="lg:col-span-4">
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm lg:sticky lg:top-8">
               <div className="border-b dark:border-gray-700 px-6 py-4">
                 <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
                   Order Summary

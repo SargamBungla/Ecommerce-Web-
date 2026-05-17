@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux"; // ✅ RTK
-import { fetchSingleProduct } from "../store/productSlice"; // ✅ RTK
-import { addToCart } from "../store/cartSlice"; // ✅ RTK
+import { useSelector, useDispatch } from "react-redux";
+import { fetchSingleProduct } from "../store/productSlice";
+import { addToCart } from "../store/cartSlice";
 import FormatePrice from "../Helpers/FormatePrice";
 import { useNavigate } from "react-router-dom";
 
@@ -13,13 +13,12 @@ export const SingleProduct = () => {
   const [qty, setQty] = useState(1);
   const [mainImage, setMainImage] = useState("");
 
-  // ✅ Context ki jagah useSelector
   const { singleProduct, isSingleLoading } = useSelector(
     (state) => state.products,
   );
 
   useEffect(() => {
-    dispatch(fetchSingleProduct(id)); // ✅ API call
+    dispatch(fetchSingleProduct(id));
   }, [id]);
 
   useEffect(() => {
@@ -51,17 +50,19 @@ export const SingleProduct = () => {
   } = singleProduct;
 
   const handleAddToCart = () => {
-    dispatch(addToCart({ ...singleProduct, qty })); // ✅ RTK
+    dispatch(addToCart({ ...singleProduct, qty }));
     navigate("/cart");
   };
 
   return (
-    <section className="py-16 px-4 max-w-6xl mx-auto bg-white dark:bg-gray-900 min-h-screen">
-      <p className="text-gray-500 dark:text-gray-400 mb-8 capitalize">
+    <section className="py-10 md:py-16 px-4 max-w-6xl mx-auto bg-white dark:bg-gray-900 min-h-screen">
+      {/* Breadcrumb */}
+      <p className="text-gray-500 dark:text-gray-400 mb-6 capitalize text-sm">
         Home / {category} / {title}
       </p>
 
-      <div className="grid grid-cols-2 gap-12">
+      {/* ✅ Mobile: 1 col, Desktop: 2 col */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
         {/* LEFT — Images */}
         <div className="flex gap-4">
           {/* Thumbnails */}
@@ -73,7 +74,7 @@ export const SingleProduct = () => {
                   src={img}
                   alt={title}
                   onClick={() => setMainImage(img)}
-                  className={`w-20 h-20 object-contain rounded-lg border-2 cursor-pointer
+                  className={`w-14 h-14 md:w-20 md:h-20 object-contain rounded-lg border-2 cursor-pointer
                     ${
                       mainImage === img
                         ? "border-purple-500"
@@ -89,14 +90,14 @@ export const SingleProduct = () => {
             <img
               src={mainImage || thumbnail}
               alt={title}
-              className="w-full h-96 object-contain rounded-2xl bg-gray-50 dark:bg-gray-800"
+              className="w-full h-64 md:h-96 object-contain rounded-2xl bg-gray-50 dark:bg-gray-800"
             />
           </div>
         </div>
 
         {/* RIGHT — Details */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2">
             {title}
           </h1>
 
@@ -104,19 +105,22 @@ export const SingleProduct = () => {
             {"★".repeat(Math.round(rating))} ({rating})
           </p>
 
-          <p className="text-gray-400 line-through">
+          <p className="text-gray-400 line-through text-sm">
             MRP: <FormatePrice price={price} />
           </p>
-          <p className="text-purple-600 font-bold text-2xl mb-4">
+          <p className="text-purple-600 font-bold text-xl md:text-2xl mb-4">
             Deal:{" "}
             <FormatePrice
               price={(price * (1 - discountPercentage / 100)).toFixed(2)}
             />
           </p>
 
-          <p className="text-gray-600 dark:text-gray-300 mb-6">{description}</p>
+          <p className="text-gray-600 dark:text-gray-300 mb-6 text-sm md:text-base">
+            {description}
+          </p>
 
-          <div className="flex gap-6 mb-6 text-sm">
+          {/* ✅ Mobile: column, Desktop: row */}
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 mb-6 text-sm">
             <span className="text-gray-600 dark:text-gray-300">
               Status: <b className="text-green-600">{availabilityStatus}</b>
             </span>
@@ -150,7 +154,7 @@ export const SingleProduct = () => {
           {/* Add to Cart */}
           <button
             onClick={handleAddToCart}
-            className="bg-purple-600 text-white px-10 py-3 rounded-md hover:bg-purple-700 transition text-lg font-semibold w-full"
+            className="bg-purple-600 text-white px-10 py-3 rounded-md hover:bg-purple-700 transition text-base md:text-lg font-semibold w-full"
           >
             ADD TO CART
           </button>
