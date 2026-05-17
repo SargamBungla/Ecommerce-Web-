@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux"; // ✅ RTK
-import { setSorting, applyFilters } from "../store/filterSlice"; // ✅ RTK
+import { setSorting, applyFilters } from "../store/FilterSlice"; // ✅ RTK
 
 const Sort = () => {
   const dispatch = useDispatch();

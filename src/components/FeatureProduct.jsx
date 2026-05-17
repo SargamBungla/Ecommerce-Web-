@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../store/productSlice";
-import { setProducts } from "../store/filterSlice";
+import { setProducts } from "../store/FilterSlice";
 import Product from "./Product";
 
 const FeatureProduct = () => {

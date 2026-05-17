@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux"; // ✅ RTK
-import { updateFilter, applyFilters, clearFilters } from "../store/filterSlice"; // ✅ RTK
+import { updateFilter, applyFilters, clearFilters } from "../store/FilterSlice"; // ✅ RTK
 import FormatePrice from "../Helpers/FormatePrice";
 
 const FilterSection = () => {
